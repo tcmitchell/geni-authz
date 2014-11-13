@@ -14,6 +14,7 @@ src_checksum = "7a6ad1fa87a1817bf4af11b6465548965e03e4c4cf276bd2c610c57e80926fd8
 src_filepath = "#{Chef::Config[:file_cache_path]}/#{gcf_dir}.tar.gz"
 extract_path = "/opt"
 dest_path = "#{extract_path}/#{gcf_dir}"
+config_dir = "/etc/geni-authz"
 
 remote_file src_filepath do
   source "#{src_url}"
@@ -27,4 +28,20 @@ bash 'extract_module' do
     tar xzf #{src_filepath} -C #{extract_path}
     EOH
   not_if { ::File.exists?(dest_path) }
+end
+
+# Create the config dir
+bash 'config_dir' do
+  code <<-EOH
+    mkdir -p #{config_dir}
+    EOH
+  not_if { ::File.directory?(config_dir) }
+end
+
+# Install the policy map file from a template
+template "/etc/geni-authz/policy-map.json" do
+  source "policy-map.json.erb"
+  variables({
+              :gcf_dir => "#{dest_path}"
+            })
 end
