@@ -8,9 +8,9 @@
 
 # Download branch tkt660_gcfauth of gcf.
 # TODO: when this is released, update to the appropriate download of gcf
-gcf_dir = "/gcf-4094de01de"
+gcf_dir = "gcf-8c834a5dcb"
 src_url = "http://www.gpolab.bbn.com/experiment-support/gposw/aa/#{gcf_dir}.tar.gz"
-src_checksum = "40664f1cb2b2cbabeabea980507dcddc5ba1ef1dab5a79c2a6eb540909e7afbf"
+src_checksum = "7a6ad1fa87a1817bf4af11b6465548965e03e4c4cf276bd2c610c57e80926fd8"
 src_filepath = "#{Chef::Config[:file_cache_path]}/#{gcf_dir}.tar.gz"
 extract_path = "/opt"
 dest_path = "#{extract_path}/#{gcf_dir}"
