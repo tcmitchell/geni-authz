@@ -45,3 +45,15 @@ template "/etc/geni-authz/policy-map.json" do
               :gcf_dir => "#{dest_path}"
             })
 end
+
+# Install a script to run the servier
+template "/usr/local/bin/geni-authz" do
+  source "geni-authz.erb"
+  mode '0755'
+  owner 'root'
+  group 'root'
+  variables({
+              :gcf_dir => "#{dest_path}",
+              :cfg_dir => "#{config_dir}"
+            })
+end
