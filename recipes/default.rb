@@ -15,6 +15,7 @@ src_filepath = "#{Chef::Config[:file_cache_path]}/#{gcf_dir}.tar.gz"
 extract_path = "/opt"
 dest_path = "#{extract_path}/#{gcf_dir}"
 config_dir = "/etc/geni-authz"
+certs_dir = "#{config_dir}/certs"
 
 remote_file src_filepath do
   source "#{src_url}"
@@ -38,6 +39,14 @@ bash 'config_dir' do
   not_if { ::File.directory?(config_dir) }
 end
 
+# Create the certs dir
+bash 'config_dir' do
+  code <<-EOH
+    mkdir -p #{certs_dir}
+    EOH
+  not_if { ::File.directory?(certs_dir) }
+end
+
 # Install the policy map file from a template
 template "/etc/geni-authz/policy-map.json" do
   source "policy-map.json.erb"
@@ -54,6 +63,14 @@ template "/usr/local/bin/geni-authz" do
   group 'root'
   variables({
               :gcf_dir => "#{dest_path}",
-              :cfg_dir => "#{config_dir}"
+              :cfg_dir => "#{config_dir}",
+              :certs_dir => "#{certs_dir}"
             })
+end
+
+template "#{certs_dir}/utah-pg-cm.pem" do
+  source "utah-pg-cm.pem"
+  mode '0644'
+  owner 'root'
+  group 'root'
 end

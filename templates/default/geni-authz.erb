@@ -4,6 +4,8 @@ GCF_HOME="<%= @gcf_dir %>"
 GCF_SRC="${GCF_HOME}/src"
 AUTHZ_MAIN="${GCF_SRC}/gcf/geni/auth/authorizer_server.py"
 AUTHZ_CFG_DIR="<%= @cfg_dir %>"
+AUTHZ_CERTS_DIR="<%= @cfg_dir %>"
 
 PYTHONPATH="${GCF_SRC}" python "${AUTHZ_MAIN}" --port 8100 \
-    --authorizer_policy_map_file "${AUTHZ_CFG_DIR}/policy-map.json"
+    --authorizer_policy_map_file "${AUTHZ_CFG_DIR}/policy-map.json" \
+    --trusted_roots "${AUTHZ_CERTS_DIR}"
