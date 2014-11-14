@@ -16,6 +16,7 @@ extract_path = "/opt"
 dest_path = "#{extract_path}/#{gcf_dir}"
 config_dir = "/etc/geni-authz"
 certs_dir = "#{config_dir}/certs"
+policy_file = "#{config_dir}/am-policy.json"
 
 remote_file src_filepath do
   source "#{src_url}"
@@ -47,11 +48,21 @@ bash 'config_dir' do
   not_if { ::File.directory?(certs_dir) }
 end
 
+# Install the policy file from a template
+template "#{policy_file}" do
+  source "am-policies.json.erb"
+  variables({
+              :am_cert => "#{certs_dir}/utah-pg-cm.pem",
+              # TO DO: fix this - which SA?
+              :sa_cert => "#{certs_dir}/utah-pg-cm.pem"
+            })
+end
+
 # Install the policy map file from a template
 template "/etc/geni-authz/policy-map.json" do
   source "policy-map.json.erb"
   variables({
-              :gcf_dir => "#{dest_path}"
+              :policy_file => "#{policy_file}"
             })
 end
 
