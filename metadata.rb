@@ -6,3 +6,4 @@ description      'Installs/Configures geni-authz'
 long_description 'Installs/Configures geni-authz'
 version          '0.1.0'
 
+depends "gcfdev"
